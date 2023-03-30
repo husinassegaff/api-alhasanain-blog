@@ -15,6 +15,10 @@ import (
 	"time"
 )
 
+var (
+	err error
+)
+
 func CreateUser(user structs.User) (error, structs.User) {
 
 	// generate id
@@ -25,13 +29,12 @@ func CreateUser(user structs.User) (error, structs.User) {
 	user.Password = hex.EncodeToString(hash[:])
 
 	// generate token
-	tokenBytes := make([]byte, 32)
-	_, err := rand.Read(tokenBytes)
-	if err != nil {
-		fmt.Println("Error Token: ", err)
+	user.Token = ""
+
+	// if role not assigned, set role to user
+	if user.Role == "" {
+		user.Role = "user"
 	}
-	tokenString := base64.StdEncoding.EncodeToString(tokenBytes)
-	user.Token = tokenString
 
 	// set created at
 	user.CreatedAt = time.Now()
@@ -57,7 +60,6 @@ func CreateUser(user structs.User) (error, structs.User) {
 	err = userRow.Scan(&user.ID, &user.Name, &user.Email, &user.Role, &user.Token)
 
 	if err != nil {
-		fmt.Println("Error scan: ", err)
 		return err, structs.User{}
 	}
 
@@ -98,4 +100,51 @@ func GetAllUser() (err error, results []structs.User) {
 	}
 
 	return nil, results
+}
+
+func GetUserById(id string) (err error, user structs.User) {
+
+	s := "SELECT * FROM public.user WHERE id = $1"
+
+	database.Init()
+
+	row := database.DB.QueryRow(s, id)
+
+	var updatedAt sql.NullTime
+	err = row.Scan(&user.ID, &user.Name, &user.Email, &user.CreatedAt, &updatedAt, &user.Role, &user.Password, &user.Token)
+	if err != nil {
+		return err, structs.User{}
+	}
+
+	return nil, user
+}
+
+func LoginUser(email string, password string) (err error, user structs.User) {
+
+	s := "SELECT * FROM public.user WHERE email = $1 AND password = $2"
+
+	database.Init()
+
+	row := database.DB.QueryRow(s, email, password)
+
+	var updatedAt sql.NullTime
+	err = row.Scan(&user.ID, &user.Name, &user.Email, &user.CreatedAt, &updatedAt, &user.Role, &user.Password, &user.Token)
+	if err != nil {
+		return err, structs.User{}
+	}
+
+	//generate token
+	tokenBytes := make([]byte, 32)
+	_, err = rand.Read(tokenBytes)
+	if err != nil {
+		fmt.Println("Error Token: ", err)
+	}
+	tokenString := base64.StdEncoding.EncodeToString(tokenBytes)
+	err, user.Token = SetToken(email, tokenString)
+
+	if err != nil {
+		return errors.New("error set token"), structs.User{}
+	}
+
+	return nil, user
 }

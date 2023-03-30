@@ -13,9 +13,10 @@ func main() {
 
 	api := router.Group("/api")
 
-	// route di dalam grup router '/api'
 	api.POST("/user/register", controllers.CreateUser)
 	api.GET("/user/get/all", controllers.GetAllUser)
+	api.GET("/user/get/:id", controllers.GetUserById)
+	api.POST("/user/login", controllers.LoginUser)
 
 	// Handle 404
 	router.NoRoute(func(c *gin.Context) {
