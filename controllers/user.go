@@ -13,13 +13,17 @@ func CreateUser(c *gin.Context) {
 
 	err := c.ShouldBindJSON(&user)
 	if err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(400, gin.H{
+			"success": false,
+			"message": "failed",
+			"error":   err.Error()})
 		return
 	}
 
 	// check length password
 	if len(user.Password) < 6 {
 		c.JSON(400, gin.H{
+			"success": false,
 			"message": "failed",
 			"error":   "Password must be more than 6 characters"})
 		return
@@ -28,6 +32,7 @@ func CreateUser(c *gin.Context) {
 	// check role must admin or user
 	if user.Role != "admin" && user.Role != "user" {
 		c.JSON(400, gin.H{
+			"success": false,
 			"message": "failed",
 			"error":   "Role not valid"})
 		return
@@ -36,12 +41,14 @@ func CreateUser(c *gin.Context) {
 	err, user = repository.CreateUser(user)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
 			"message": "failed",
 			"error":   err.Error()})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
+		"success": true,
 		"message": "success",
 		"data":    user,
 	})
@@ -57,6 +64,7 @@ func GetAllUser(c *gin.Context) {
 	// check if error
 	if err != nil {
 		result = gin.H{
+			"success": false,
 			"message": "failed",
 			"error":   err.Error(),
 		}
@@ -65,6 +73,7 @@ func GetAllUser(c *gin.Context) {
 	}
 
 	result = gin.H{
+		"success": true,
 		"message": "success",
 		"data":    users,
 	}

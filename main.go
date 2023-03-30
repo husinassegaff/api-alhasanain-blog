@@ -11,9 +11,11 @@ func main() {
 
 	router := gin.Default()
 
-	// User
-	router.POST("/register", controllers.CreateUser)
-	router.GET("/user", controllers.GetAllUser)
+	api := router.Group("/api")
+
+	// route di dalam grup router '/api'
+	api.POST("/user/register", controllers.CreateUser)
+	api.GET("/user/get/all", controllers.GetAllUser)
 
 	// Handle 404
 	router.NoRoute(func(c *gin.Context) {
@@ -23,5 +25,4 @@ func main() {
 	if err := router.Run("localhost:3000"); err != nil {
 		log.Fatalf("Failed to run server: %v", err)
 	}
-
 }
