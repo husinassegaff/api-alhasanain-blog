@@ -3,6 +3,7 @@
 ## Table of Contents
 * [Authentication](#authentication)
     1. [Register](#register)
+    2. [Login](#login) 
 
   
 ## Authentication
@@ -53,6 +54,47 @@
 ```json
 {
   "error": "email already exists",
+  "message": "failed",
+  "success": false
+}
+```
+
+### 2. Login
+
+- URL: `/api/user/login`
+- Method: `POST`
+- Request body:
+  - `email`: string
+  - `password`: string
+
+**Example success response**
+```json
+{
+  "data": {
+    "id_user": "78fc0eba-fbdc-4eb6-be19-4c6ce5b4624f",
+    "name": "husin",
+    "email": "husin456@gmail.com",
+    "role": "admin",
+    "token": "joQ7TuPtbJYb7v619iulKiD9qrQ1atCt/D6d9EOQ0zY="
+  },
+  "message": "success",
+  "success": true
+}
+```
+
+**Example success response**
+- user already logged in
+```json
+{
+  "error": "user already login",
+  "message": "failed",
+  "success": false
+}
+```
+- email or password is wrong
+```json
+{
+  "error": "email or password is wrong",
   "message": "failed",
   "success": false
 }
