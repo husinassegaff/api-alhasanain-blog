@@ -10,6 +10,7 @@ import (
 func CreateUser(c *gin.Context) {
 
 	var user structs.User
+	var userResponse structs.UserResponse
 
 	err := c.ShouldBindJSON(&user)
 	if err != nil {
@@ -47,10 +48,16 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
+	userResponse.ID = user.ID
+	userResponse.Name = user.Name
+	userResponse.Email = user.Email
+	userResponse.Role = user.Role
+	userResponse.Token = user.Token
+
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "success",
-		"data":    user,
+		"data":    userResponse,
 	})
 }
 

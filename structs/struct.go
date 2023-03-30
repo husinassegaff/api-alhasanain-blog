@@ -13,6 +13,14 @@ type User struct {
 	UpdatedAt *time.Time `json:"updated_at"`
 }
 
+type UserResponse struct {
+	ID    string `json:"id_user"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
+	Role  string `json:"role"`
+	Token string `json:"token"`
+}
+
 type Category struct {
 	ID        string `json:"id_category"`
 	Title     string `json:"title"`
