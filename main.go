@@ -13,10 +13,10 @@ func main() {
 
 	api := router.Group("/api")
 
-	api.POST("/user/register", controllers.CreateUser)
+	api.POST("/user/register", controllers.RegisterUser)
+	api.POST("/user/login", controllers.LoginUser)
 	api.GET("/user/get/all", controllers.GetAllUser)
 	api.GET("/user/get/:id", controllers.GetUserById)
-	api.POST("/user/login", controllers.LoginUser)
 
 	// Handle 404
 	router.NoRoute(func(c *gin.Context) {

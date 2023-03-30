@@ -19,7 +19,7 @@ var (
 	err error
 )
 
-func CreateUser(user structs.User) (error, structs.User) {
+func RegisterUser(user structs.User) (error, structs.User) {
 
 	// generate id
 	user.ID = uuid.New().String()
@@ -99,6 +99,13 @@ func GetAllUser() (err error, results []structs.User) {
 		results = append(results, user)
 	}
 
+	defer func(DB *sql.DB) {
+		err := DB.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(database.DB)
+
 	return nil, results
 }
 
@@ -116,21 +123,48 @@ func GetUserById(id string) (err error, user structs.User) {
 		return err, structs.User{}
 	}
 
+	defer func(DB *sql.DB) {
+		err := DB.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(database.DB)
+
 	return nil, user
 }
 
 func LoginUser(email string, password string) (err error, user structs.User) {
 
-	s := "SELECT * FROM public.user WHERE email = $1 AND password = $2"
+	// check if user already login
+	s := "SELECT token FROM public.user WHERE email = $1"
 
 	database.Init()
 
-	row := database.DB.QueryRow(s, email, password)
+	row := database.DB.QueryRow(s, email)
+
+	var token string
+	err = row.Scan(&token)
+
+	if err != nil {
+		return errors.New("email or password is wrong"), structs.User{}
+	}
+
+	if token != "" {
+		return errors.New("user already login"), structs.User{}
+	}
+
+	// hash password
+	hash := md5.Sum([]byte(password))
+	password = hex.EncodeToString(hash[:])
+
+	s = "SELECT * FROM public.user WHERE email = $1 AND password = $2"
+
+	row = database.DB.QueryRow(s, email, password)
 
 	var updatedAt sql.NullTime
 	err = row.Scan(&user.ID, &user.Name, &user.Email, &user.CreatedAt, &updatedAt, &user.Role, &user.Password, &user.Token)
 	if err != nil {
-		return err, structs.User{}
+		return errors.New("email or password is wrong"), structs.User{}
 	}
 
 	//generate token
@@ -145,6 +179,13 @@ func LoginUser(email string, password string) (err error, user structs.User) {
 	if err != nil {
 		return errors.New("error set token"), structs.User{}
 	}
+
+	defer func(DB *sql.DB) {
+		err := DB.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(database.DB)
 
 	return nil, user
 }

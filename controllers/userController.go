@@ -2,12 +2,14 @@ package controllers
 
 import (
 	"api-alhasanain-blog/repository"
+	"api-alhasanain-blog/response"
 	"api-alhasanain-blog/structs"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strings"
 )
 
-func CreateUser(c *gin.Context) {
+func RegisterUser(c *gin.Context) {
 
 	var user structs.User
 	var userResponse structs.UserResponse
@@ -39,7 +41,7 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	err, user = repository.CreateUser(user)
+	err, user = repository.RegisterUser(user)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
@@ -48,11 +50,7 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	userResponse.ID = user.ID
-	userResponse.Name = user.Name
-	userResponse.Email = user.Email
-	userResponse.Role = user.Role
-	userResponse.Token = user.Token
+	response.CreateUserResponse(user)
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
@@ -63,9 +61,57 @@ func CreateUser(c *gin.Context) {
 
 func GetAllUser(c *gin.Context) {
 	var (
-		result gin.H
+		result        gin.H
+		userResponses []structs.UserResponse
+		userResponse  structs.UserResponse
 	)
 
+	// Mengambil header Authorization dari permintaan
+	authHeader := c.GetHeader("Authorization")
+
+	// Memeriksa apakah header Authorization ada atau tidak
+	if authHeader == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"success": false,
+			"message": "Authorization header required",
+		})
+		return
+	}
+
+	// Memisahkan token dari header dengan split
+	splitToken := strings.Split(authHeader, "Bearer ")
+	if len(splitToken) != 2 {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"success": false,
+			"message": "Invalid token format",
+		})
+		return
+	}
+
+	// Mengambil token dari hasil split
+	token := splitToken[1]
+
+	// Memverifikasi token
+
+	err, role := repository.GetRoleWithToken(token)
+
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"success": false,
+			"message": "Invalid token",
+		})
+		return
+	}
+
+	if role != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"success": false,
+			"message": "You are not authorized to access this resource",
+		})
+		return
+	}
+
+	// Jika token valid, maka dapat melanjutkan permintaan
 	err, users := repository.GetAllUser()
 
 	// check if error
@@ -79,10 +125,16 @@ func GetAllUser(c *gin.Context) {
 		return
 	}
 
+	// parsing users to userResponse
+	for _, user := range users {
+		userResponse = response.CreateUserResponse(user)
+		userResponses = append(userResponses, userResponse)
+	}
+
 	result = gin.H{
 		"success": true,
 		"message": "success",
-		"data":    users,
+		"data":    userResponses,
 	}
 
 	c.JSON(http.StatusOK, result)
@@ -123,6 +175,7 @@ func LoginUser(c *gin.Context) {
 	)
 
 	var user structs.User
+	var userResponse structs.UserResponse
 
 	err := c.ShouldBindJSON(&user)
 	if err != nil {
@@ -142,10 +195,12 @@ func LoginUser(c *gin.Context) {
 		return
 	}
 
+	userResponse = response.CreateUserResponse(user)
+
 	result = gin.H{
 		"success": true,
 		"message": "success",
-		"data":    user,
+		"data":    userResponse,
 	}
 
 	c.JSON(http.StatusOK, result)
