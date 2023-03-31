@@ -52,7 +52,7 @@ func main() {
 		c.JSON(404, gin.H{"message": "Not found"})
 	})
 
-	if err := router.Run("localhost:" + os.Getenv("PORT")); err != nil {
+	if err := router.Run(":" + os.Getenv("PORT")); err != nil {
 		log.Fatalf("Failed to run server: %v", err)
 	}
 }
