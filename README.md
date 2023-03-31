@@ -10,6 +10,7 @@
 
 * [Post](#post)
     1. [Create Post](#create-post)
+    2. [Update Post](#update-post) 
 
   
 ## Authentication
@@ -246,7 +247,6 @@
 - Request body:
   - `id_user`: string
   - `title`: string
-  - `meta_title`: string (optional)
   - `content`: string
   - `summary`: string (optional)
   - `status`: string (`draft` || `publish` || `delete`)
@@ -274,7 +274,7 @@
 - title, content, status is required
 ```json
 {
-  "message": "title, content, status must be filled"
+  "message": "title, content, status must be filled",
   "success": false
 }
 ```
@@ -296,6 +296,34 @@
 ```json
 {
   "message": "You are not authorized to access this resource",
+  "success": false
+}
+```
+
+### 2. Update Post
+
+- URL: `/api/post/update`
+- Method: `POST`
+- Request Header:
+  - Authorization: `Bearer <token>`
+- Request body:
+  - `id_user`: string
+  - `title`: string (optional)
+  - `content`: string (optional)
+  - `summary`: string (optional)
+
+**Example success response**
+```json
+{
+  "message": "success",
+  "success": true
+}
+```
+**Example error response**
+- ID post not found
+```json
+{
+  "message": "Post not found",
   "success": false
 }
 ```
