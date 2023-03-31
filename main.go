@@ -38,6 +38,10 @@ func main() {
 	api.GET("/meta/get/all", controllers.GetAllMeta)
 	api.GET("/meta/get/:id", controllers.GetMetaById)
 
+	api.POST("/tag/create", controllers.CreateTag)
+	api.POST("/tag/delete/:id", controllers.DeleteTag)
+	api.GET("/tag/get/all", controllers.GetAllTag)
+
 	api.POST("/comment/create", controllers.CreateComment)
 	api.POST("/comment/delete/:id", controllers.DeleteComment)
 	api.GET("/comment/get/all", controllers.GetAllComment)
