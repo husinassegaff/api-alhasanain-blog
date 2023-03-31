@@ -19,6 +19,8 @@ func main() {
 	api.GET("/user/get/all", controllers.GetAllUser)
 	api.GET("/user/get/:id", controllers.GetUserById)
 
+	api.POST("/post/create", controllers.CreatePost)
+
 	// Handle 404
 	router.NoRoute(func(c *gin.Context) {
 		c.JSON(404, gin.H{"message": "Not found"})
