@@ -6,6 +6,7 @@
     2. [Login](#login)
     3. [Get All User](#get-all-user)
     4. [Get User By Id](#get-user-by-id)
+    5. [Logout](#logout)
 
   
 ## Authentication
@@ -189,5 +190,30 @@
   "error": "user not found",
   "message": "failed",
   "success": false
+}
+```
+
+### 5. Logout
+
+- URL: `/api/user/logout`
+- Method: `POST`
+- Request Header:
+  - Authorization: `Bearer <token>`
+- Request body:
+  - `email`: string
+
+**Example success response**
+```json
+{
+  "message": "success",
+  "success": true
+}
+```
+
+**Example error response**
+```json
+{
+    "message": "You are not authorized to access this resource",
+    "success": false
 }
 ```
