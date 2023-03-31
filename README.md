@@ -22,6 +22,13 @@
     3. [Delete Category](#delete-category)
     4. [Get All Category](#get-all-category)
     5. [Get Category By Id](#get-category-by-id)
+
+* [Meta](#meta)
+  1. [Create Meta](#create-meta)
+  2. [Update Meta](#update-meta)
+  3. [Delete Meta](#delete-meta)
+  4. [Get All Meta](#get-all-meta)
+  5. [Get Meta By Id](#get-meta-by-id)
   
 ## Authentication
 
@@ -575,6 +582,132 @@
     "updated_at": null
   },
   "message": "success",
+  "success": true
+}
+```
+
+
+## Meta
+
+### 1. Create Meta
+
+- URL: `/api/meta/create`
+- Method: `POST`
+- Request Header:
+  - Authorization: `Bearer <token>`
+- Request body:
+  - `key`: string
+  - `content`: string
+
+**Example success response**
+```json
+{
+  "data": {
+    "id_meta": "ef1e9957-22a8-4fe2-961a-d61bf5a9b9c0",
+    "key": "image",
+    "content": "https://avatars.githubusercontent.com/u/63222585?s=96&v=4",
+    "created_at": "2023-03-31T19:44:25.8421922+07:00",
+    "updated_at": null
+  },
+  "message": "Meta created",
+  "success": true
+}
+```
+
+### 2. Update Meta
+
+- URL: `/api/meta/update`
+- Method: `POST`
+- Request Header:
+  - Authorization: `Bearer <token>`
+- Request body:
+  - `id_meta`: string
+  - `key`: string (optional)
+  - `content`: string (optional)
+
+**Example success response**
+```json
+{
+  "message": "Meta updated",
+  "success": true
+}
+```
+**Example error response**
+- ID post not found
+```json
+{
+  "message": "Failed to update meta",
+  "success": false
+}
+```
+
+### 3. Delete Meta
+- URL: `/api/meta/delete/:id`
+- Method: `POST`
+- Request Header:
+  - Authorization: `Bearer <token>`
+
+**Example success response**
+```json
+{
+  "message": "Meta deleted",
+  "success": true
+}
+```
+
+### 4. Get All Meta
+- URL: `/api/meta/get/all`
+- Method: `GET`
+- Request Header:
+  - Authorization: `Bearer <token>`
+
+**Example success response**
+```json
+{
+  "data": [
+    {
+      "id_meta": "af62d501-ce16-4228-896f-f8754faff78e",
+      "key": "image",
+      "content": "https://avatars.githubusercontent.com/u/63222585?s=96&v=4",
+      "created_at": "2023-03-31T00:00:00Z",
+      "updated_at": null
+    },
+    {
+      "id_meta": "57dec8c5-ae8a-4afc-8eea-86873a678134",
+      "key": "image",
+      "content": "https://avatars.githubusercontent.com/u/63222585?s=96&v=4",
+      "created_at": "2023-03-31T00:00:00Z",
+      "updated_at": null
+    },
+    {
+      "id_meta": "80b9d857-c92d-407b-988d-2978de38aba6",
+      "key": "image",
+      "content": "https://avatars.githubusercontent.com/u/63222585?s=96&v=4",
+      "created_at": "2023-03-31T00:00:00Z",
+      "updated_at": null
+    }
+  ],
+  "message": "Meta fetched",
+  "success": true
+}
+```
+
+### 5. Get Meta By Id
+
+- URL: `/api/meta/get/:id`
+- Method: `GET`
+
+**Example success response**
+```json
+{
+  "data": {
+    "id_meta": "af62d501-ce16-4228-896f-f8754faff78e",
+    "key": "image",
+    "content": "https://avatars.githubusercontent.com/u/63222585?s=96&v=4",
+    "created_at": "2023-03-31T00:00:00Z",
+    "updated_at": null
+  },
+  "message": "Meta fetched",
   "success": true
 }
 ```
