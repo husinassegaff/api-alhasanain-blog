@@ -13,7 +13,7 @@ var (
 
 func DbMigrate(dbParam *sql.DB) {
 	migrations := &migrate.PackrMigrationSource{
-		Box: packr.New("migrations", "./sql_migrations"),
+		Box: packr.New("migrations", "./migrations"),
 	}
 
 	n, errs := migrate.Exec(dbParam, "postgres", migrations, migrate.Up)
