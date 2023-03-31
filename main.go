@@ -2,9 +2,7 @@ package main
 
 import (
 	"api-alhasanain-blog/controllers"
-	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"log"
 	"os"
@@ -54,13 +52,7 @@ func main() {
 		c.JSON(404, gin.H{"message": "Not found"})
 	})
 
-	err := godotenv.Load(".env") // Load the .env file
-	if err != nil {
-		fmt.Printf("Error loading .env file: %s", err.Error())
-		os.Exit(1)
-	}
-
-	if err := router.Run(":" + os.Getenv("PORT")); err != nil {
+	if err := router.Run("localhost:" + os.Getenv("PORT")); err != nil {
 		log.Fatalf("Failed to run server: %v", err)
 	}
 }
