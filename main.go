@@ -54,7 +54,7 @@ func main() {
 		c.JSON(404, gin.H{"message": "Not found"})
 	})
 
-	err := godotenv.Load("config/.env") // Load the .env file
+	err := godotenv.Load(".env") // Load the .env file
 	if err != nil {
 		fmt.Printf("Error loading .env file: %s", err.Error())
 		os.Exit(1)
