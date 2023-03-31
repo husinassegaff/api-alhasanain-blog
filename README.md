@@ -29,6 +29,12 @@
   3. [Delete Meta](#delete-meta)
   4. [Get All Meta](#get-all-meta)
   5. [Get Meta By Id](#get-meta-by-id)
+
+* [Comment](#comment)
+  1. [Create Comment](#create-comment)
+  2. [Delete Comment](#delete-comment)
+  3. [Get All Comment](#get-all-comment)
+
   
 ## Authentication
 
@@ -708,6 +714,85 @@
     "updated_at": null
   },
   "message": "Meta fetched",
+  "success": true
+}
+```
+
+## Comment
+
+### 1. Create Comment
+
+- URL: `/api/comment/create`
+- Method: `POST`
+- Request Header:
+  - Authorization: `Bearer <token>`
+- Request body:
+  - `id_user`: string
+  - `id_post`: string
+  - `content`: string
+
+**Example success response**
+```json
+{
+  "data": {
+    "id_comment": "ea7e1e8a-35fb-43aa-9b81-25e36dc62e90",
+    "id_user": "78fc0eba-fbdc-4eb6-be19-4c6ce5b4624f",
+    "id_post": "101fd898-a148-4599-9326-db03579bfc30",
+    "content": "lorem ipsum",
+    "created_at": "2023-03-31T21:12:37.3626484+07:00"
+  },
+  "message": "Comment created",
+  "success": true
+}
+```
+
+### 2. Delete Comment
+- URL: `/api/comment/delete/:id`
+- Method: `POST`
+- Request Header:
+  - Authorization: `Bearer <token>`
+- Request body:
+  - `id_user`: string
+
+**Example success response**
+```json
+{
+  "message": "Comment deleted",
+  "success": true
+}
+```
+
+### 3. Get All Comment
+- URL: `/api/comment/get/all`
+- Method: `GET`
+
+**Example success response**
+```json
+{
+  "data": [
+    {
+      "id_comment": "17cf09da-85b3-4077-ada4-fa7823d1e221",
+      "id_user": "78fc0eba-fbdc-4eb6-be19-4c6ce5b4624f",
+      "id_post": "101fd898-a148-4599-9326-db03579bfc30",
+      "content": "lorem ipsum",
+      "created_at": "2023-03-31T00:00:00Z"
+    },
+    {
+      "id_comment": "aee54e2a-b8db-4ba7-a341-0def781fbb93",
+      "id_user": "78fc0eba-fbdc-4eb6-be19-4c6ce5b4624f",
+      "id_post": "101fd898-a148-4599-9326-db03579bfc30",
+      "content": "lorem ipsum",
+      "created_at": "2023-03-31T00:00:00Z"
+    },
+    {
+      "id_comment": "b505d9fe-92eb-4d17-bdb2-0ab7093c6b9a",
+      "id_user": "78fc0eba-fbdc-4eb6-be19-4c6ce5b4624f",
+      "id_post": "101fd898-a148-4599-9326-db03579bfc30",
+      "content": "lorem ipsum",
+      "created_at": "2023-03-31T00:00:00Z"
+    }
+  ],
+  "message": "All comments",
   "success": true
 }
 ```
