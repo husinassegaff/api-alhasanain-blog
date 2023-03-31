@@ -10,7 +10,11 @@
 
 * [Post](#post)
     1. [Create Post](#create-post)
-    2. [Update Post](#update-post) 
+    2. [Update Post](#update-post)
+    3. [Delete Post](#delete-post)
+    4. [Change Status Post](#change-status-post)
+    5. [Get All Post](#get-all-post)
+    6. [Get Post By Id](#get-post-by-id) 
 
   
 ## Authentication
@@ -325,5 +329,115 @@
 {
   "message": "Post not found",
   "success": false
+}
+```
+
+### 3. Delete Post
+- URL: `/api/post/delete/:id`
+- Method: `POST`
+- Request Header:
+  - Authorization: `Bearer <token>`
+
+**Example success response**
+```json
+{
+  "message": "success",
+  "success": true
+}
+```
+
+### 4. Change Status Post
+- URL: `/api/post/delete/:id`
+- Method: `POST`
+- Request Header:
+  - Authorization: `Bearer <token>`
+- Request body:
+  - `id_post`: string
+  - `status`: string
+
+**Example success response**
+```json
+{
+  "message": "success",
+  "success": true
+}
+```
+
+### 5. Get All Post
+- URL: `/api/post/get/all`
+- Method: `GET`
+
+**Example success response**
+```json
+{
+  "data": [
+    {
+      "id_post": "44f88b7e-3151-40bd-8b29-6cb2e330bb7a",
+      "id_user": "78fc0eba-fbdc-4eb6-be19-4c6ce5b4624f",
+      "title": "Lorem Ipsum",
+      "meta_title": "Lorem-Ipsum",
+      "slug": "lorem-ipsum",
+      "content": "lorem ipsum dolor sit amet",
+      "summary": null,
+      "status": "publish",
+      "published_at": "2023-03-31T00:00:00Z",
+      "created_at": "2023-03-31T00:00:00Z",
+      "updated_at": null
+    },
+    {
+      "id_post": "101fd898-a148-4599-9326-db03579bfc30",
+      "id_user": "78fc0eba-fbdc-4eb6-be19-4c6ce5b4624f",
+      "title": "Lorem Ipsum",
+      "meta_title": "Lorem-Ipsum",
+      "slug": "lorem-ipsum",
+      "content": "lorem ipsum dolor sit amet",
+      "summary": null,
+      "status": "draft",
+      "published_at": null,
+      "created_at": "2023-03-31T00:00:00Z",
+      "updated_at": null
+    },
+    {
+      "id_post": "43ac8f03-136a-4243-8bdb-ea51437f8995",
+      "id_user": "78fc0eba-fbdc-4eb6-be19-4c6ce5b4624f",
+      "title": "Lorem Ipsum",
+      "meta_title": "Lorem-Ipsum",
+      "slug": "lorem-ipsum",
+      "content": "lorem ipsum dolor sit amet",
+      "summary": null,
+      "status": "delete",
+      "published_at": null,
+      "created_at": "2023-03-31T00:00:00Z",
+      "updated_at": null
+    }
+  ],
+  "message": "success",
+  "success": true
+}
+```
+
+### 6. Get Post By Id
+
+- URL: `/api/post/get/:id`
+- Method: `GET`
+
+**Example success response**
+```json
+{
+  "data": {
+    "id_post": "698d3ab1-249b-41e3-b289-d992f0d70e79",
+    "id_user": "78fc0eba-fbdc-4eb6-be19-4c6ce5b4624f",
+    "title": "asd Loremasd ASDASD asdasd",
+    "meta_title": "asd-Loremasd-ASDASD-asdasd",
+    "slug": "asd-loremasd-asdasd-asdasd",
+    "content": "lorem ipsum dolor sit amet",
+    "summary": null,
+    "status": "draft",
+    "published_at": null,
+    "created_at": "2023-03-31T00:00:00Z",
+    "updated_at": "2023-03-31T00:00:00Z"
+  },
+  "message": "success",
+  "success": true
 }
 ```
