@@ -30,6 +30,11 @@
   4. [Get All Meta](#get-all-meta)
   5. [Get Meta By Id](#get-meta-by-id)
 
+* [Tag](#tag)
+  1. [Create Tag](#create-tag)
+  2. [Delete Tag](#delete-tag)
+  3. [Get All Tag](#get-all-tag)
+
 * [Comment](#comment)
   1. [Create Comment](#create-comment)
   2. [Delete Comment](#delete-comment)
@@ -714,6 +719,88 @@
     "updated_at": null
   },
   "message": "Meta fetched",
+  "success": true
+}
+```
+
+## Tag
+
+### 1. Create Tag
+
+- URL: `/api/tag/create`
+- Method: `POST`
+- Request Header:
+  - Authorization: `Bearer <token>`
+- Request body:
+  - `id_post`: string
+  - `title`: string
+
+**Example success response**
+```json
+{
+  "data": {
+    "id_tag": "2d839637-738d-4f64-bdc3-7261c2119f74",
+    "id_post": "101fd898-a148-4599-9326-db03579bfc30",
+    "title": "fiqih",
+    "meta_title": "fiqih",
+    "created_at": "2023-03-31T21:30:57.7749509+07:00",
+    "updated_at": null
+  },
+  "message": "Successfully create tag",
+  "success": true
+}
+```
+
+### 2. Delete Tag
+- URL: `/api/tag/delete/:id`
+- Method: `POST`
+- Request Header:
+  - Authorization: `Bearer <token>`
+- Request body:
+  - `id_post`: string
+
+**Example success response**
+```json
+{
+  "message": "Successfully delete tag",
+  "success": true
+}
+```
+
+### 3. Get All Tag
+- URL: `/api/tag/get/all`
+- Method: `GET`
+
+**Example success response**
+```json
+{
+  "data": [
+    {
+      "id_tag": "dca50762-61db-4594-b194-37e7ad16e7d0",
+      "id_post": "101fd898-a148-4599-9326-db03579bfc30",
+      "title": "fiqih",
+      "meta_title": "fiqih",
+      "created_at": "2023-03-31T00:00:00Z",
+      "updated_at": null
+    },
+    {
+      "id_tag": "3ff8fb5f-cbb0-4e40-a87b-e4251ccb41a9",
+      "id_post": "101fd898-a148-4599-9326-db03579bfc30",
+      "title": "fiqih",
+      "meta_title": "fiqih",
+      "created_at": "2023-03-31T00:00:00Z",
+      "updated_at": null
+    },
+    {
+      "id_tag": "9d55e549-da68-4c78-9db4-1d3f382119f8",
+      "id_post": "101fd898-a148-4599-9326-db03579bfc30",
+      "title": "fiqih",
+      "meta_title": "fiqih",
+      "created_at": "2023-03-31T00:00:00Z",
+      "updated_at": null
+    }
+  ],
+  "message": "Successfully get all tag",
   "success": true
 }
 ```
