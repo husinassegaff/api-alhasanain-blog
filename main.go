@@ -26,6 +26,12 @@ func main() {
 	api.GET("/post/get/all", controllers.GetAllPost)
 	api.GET("/post/get/:id", controllers.GetPostById)
 
+	api.POST("/category/create", controllers.CreateCategory)
+	api.POST("/category/update", controllers.UpdateCategory)
+	api.POST("/category/delete/:id", controllers.DeleteCategory)
+	api.GET("/category/get/all", controllers.GetAllCategory)
+	api.GET("/category/get/:id", controllers.GetCategoryById)
+
 	// Handle 404
 	router.NoRoute(func(c *gin.Context) {
 		c.JSON(404, gin.H{"message": "Not found"})
