@@ -8,6 +8,9 @@
     4. [Get User By Id](#get-user-by-id)
     5. [Logout](#logout)
 
+* [Post](#post)
+    1. [Create Post](#create-post)
+
   
 ## Authentication
 
@@ -211,9 +214,88 @@
 ```
 
 **Example error response**
+- authorization not found
 ```json
 {
-    "message": "You are not authorized to access this resource",
+    "message": "Authorization header required",
     "success": false
+}
+```
+- token is invalid
+```json
+{
+    "message": "Invalid token",
+    "success": false
+}
+```
+```json
+{
+  "message": "You are not authorized to access this resource",
+  "success": false
+}
+```
+
+## Post
+
+### 1. Create Post
+
+- URL: `/api/post/create`
+- Method: `POST`
+- Request Header:
+  - Authorization: `Bearer <token>`
+- Request body:
+  - `id_user`: string
+  - `title`: string
+  - `meta_title`: string (optional)
+  - `content`: string
+  - `summary`: string (optional)
+  - `status`: string (`draft` || `publish` || `delete`)
+
+**Example success response**
+```json
+{
+  "data": {
+    "id_post": "9ed9546f-a34b-4fc5-835a-949557ccfc32",
+    "id_user": "78fc0eba-fbdc-4eb6-be19-4c6ce5b4624f",
+    "title": "Lorem Ipsum",
+    "meta_title": null,
+    "slug": "lorem-ipsum",
+    "content": "lorem ipsum dolor sit amet",
+    "summary": null,
+    "status": "draft",
+    "published_at": null,
+    "created_at": "2023-03-31T00:00:00Z",
+    "updated_at": null
+  },
+  "message": "success"
+}
+```
+**Example error response**
+- title, content, status is required
+```json
+{
+  "message": "title, content, status must be filled"
+  "success": false
+}
+```
+- authorization not found
+```json
+{
+    "message": "Authorization header required",
+    "success": false
+}
+```
+- token is invalid
+```json
+{
+    "message": "Invalid token",
+    "success": false
+}
+```
+- token from role user
+```json
+{
+  "message": "You are not authorized to access this resource",
+  "success": false
 }
 ```
