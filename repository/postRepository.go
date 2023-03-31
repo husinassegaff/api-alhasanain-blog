@@ -126,3 +126,96 @@ func CheckPostById(id string) bool {
 
 	return true
 }
+
+func DeletePost(id string) error {
+	s := "DELETE FROM public.post WHERE id = $1"
+
+	database.Init()
+
+	_, err := database.DB.Exec(s, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func ChangeStatusPost(id string, status string) error {
+
+	database.Init()
+
+	if status == "publish" {
+		s := "UPDATE public.post SET status = $1, published_at = $2 WHERE id = $3"
+		publishedTime := time.Now()
+		_, err := database.DB.Exec(s, status, publishedTime, id)
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		s := "UPDATE public.post SET status = $1, published_at = $2 WHERE id = $3"
+		_, err := database.DB.Exec(s, status, nil, id)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+}
+
+func GetAllPost() (error, []structs.Post) {
+	var posts []structs.Post
+
+	s := "SELECT * FROM public.post"
+
+	database.Init()
+
+	rows, err := database.DB.Query(s)
+	if err != nil {
+		return err, []structs.Post{}
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var post structs.Post
+		err := rows.Scan(&post.ID, &post.IDUser, &post.Title, &post.MetaTitle, &post.Slug, &post.Content, &post.Summary, &post.Status, &post.CreatedAt, &post.UpdatedAt, &post.PublishedAt)
+		if err != nil {
+			return err, []structs.Post{}
+		}
+		posts = append(posts, post)
+	}
+
+	defer func(DB *sql.DB) {
+		err := DB.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(database.DB)
+
+	return nil, posts
+}
+
+func GetPostById(id string) (error, structs.Post) {
+	var post structs.Post
+
+	s := "SELECT * FROM public.post WHERE id = $1"
+
+	database.Init()
+
+	row := database.DB.QueryRow(s, id)
+
+	err = row.Scan(&post.ID, &post.IDUser, &post.Title, &post.MetaTitle, &post.Slug, &post.Content, &post.Summary, &post.Status, &post.CreatedAt, &post.UpdatedAt, &post.PublishedAt)
+
+	if err != nil {
+		return err, structs.Post{}
+	}
+
+	defer func(DB *sql.DB) {
+		err := DB.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(database.DB)
+
+	return nil, post
+}
