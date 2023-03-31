@@ -142,7 +142,8 @@ func GetAllUser(c *gin.Context) {
 
 func GetUserById(c *gin.Context) {
 	var (
-		result gin.H
+		result       gin.H
+		userResponse structs.UserResponse
 	)
 
 	id := c.Param("id")
@@ -160,10 +161,12 @@ func GetUserById(c *gin.Context) {
 		return
 	}
 
+	userResponse = response.CreateUserResponse(user)
+
 	result = gin.H{
 		"success": true,
 		"message": "success",
-		"data":    user,
+		"data":    userResponse,
 	}
 
 	c.JSON(http.StatusOK, result)

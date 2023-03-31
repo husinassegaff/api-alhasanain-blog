@@ -120,7 +120,7 @@ func GetUserById(id string) (err error, user structs.User) {
 	var updatedAt sql.NullTime
 	err = row.Scan(&user.ID, &user.Name, &user.Email, &user.CreatedAt, &updatedAt, &user.Role, &user.Password, &user.Token)
 	if err != nil {
-		return err, structs.User{}
+		return errors.New("user not found"), structs.User{}
 	}
 
 	defer func(DB *sql.DB) {
