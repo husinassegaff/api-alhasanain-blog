@@ -189,3 +189,21 @@ func LoginUser(email string, password string) (err error, user structs.User) {
 
 	return nil, user
 }
+
+func LogoutUser(email string) (err error) {
+
+	err, _ = SetToken(email, "")
+
+	if err != nil {
+		return errors.New("user not found")
+	}
+
+	defer func(DB *sql.DB) {
+		err := DB.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(database.DB)
+
+	return nil
+}

@@ -66,3 +66,26 @@ func GetRoleWithToken(token string) (err error, role string) {
 
 	return nil, role
 }
+
+func GetEmailWithToken(token string) (err error, email string) {
+
+	s := "SELECT email FROM public.user WHERE token = $1"
+
+	database.Init()
+
+	row := database.DB.QueryRow(s, token)
+
+	err = row.Scan(&email)
+	if err != nil {
+		return err, ""
+	}
+
+	defer func(DB *sql.DB) {
+		err := DB.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(database.DB)
+
+	return nil, email
+}

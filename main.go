@@ -15,6 +15,7 @@ func main() {
 
 	api.POST("/user/register", controllers.RegisterUser)
 	api.POST("/user/login", controllers.LoginUser)
+	api.POST("/user/logout", controllers.LogoutUser)
 	api.GET("/user/get/all", controllers.GetAllUser)
 	api.GET("/user/get/:id", controllers.GetUserById)
 

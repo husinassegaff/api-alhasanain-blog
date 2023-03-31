@@ -4,6 +4,7 @@ import (
 	"api-alhasanain-blog/repository"
 	"api-alhasanain-blog/response"
 	"api-alhasanain-blog/structs"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
@@ -204,6 +205,92 @@ func LoginUser(c *gin.Context) {
 		"success": true,
 		"message": "success",
 		"data":    userResponse,
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
+func LogoutUser(c *gin.Context) {
+	var (
+		result gin.H
+		user   structs.User
+		email  string
+	)
+
+	err := c.ShouldBindJSON(&user)
+
+	if err != nil {
+		c.JSON(400, gin.H{
+			"success": false,
+			"message": "failed",
+			"error":   err.Error()})
+		return
+	}
+
+	// Mengambil header Authorization dari permintaan
+	authHeader := c.GetHeader("Authorization")
+
+	// Memeriksa apakah header Authorization ada atau tidak
+	if authHeader == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"success": false,
+			"message": "Authorization header required",
+		})
+		return
+	}
+
+	// Memisahkan token dari header dengan split
+	splitToken := strings.Split(authHeader, "Bearer ")
+	if len(splitToken) != 2 {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"success": false,
+			"message": "Invalid token format",
+		})
+		return
+	}
+
+	// Mengambil token dari hasil split
+	token := splitToken[1]
+
+	// Memverifikasi token
+
+	err, email = repository.GetEmailWithToken(token)
+
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"success": false,
+			"message": "Invalid token",
+		})
+		return
+	}
+
+	fmt.Println("isi email: ", email)
+	fmt.Println("isi user.email: ", user.Email)
+
+	if email != user.Email {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"success": false,
+			"message": "You are not authorized to access this resource",
+		})
+		return
+	}
+
+	err = repository.LogoutUser(user.Email)
+
+	// check if error
+	if err != nil {
+		result = gin.H{
+			"success": false,
+			"message": "failed",
+			"error":   err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, result)
+		return
+	}
+
+	result = gin.H{
+		"success": true,
+		"message": "success",
 	}
 
 	c.JSON(http.StatusOK, result)
