@@ -16,6 +16,12 @@
     5. [Get All Post](#get-all-post)
     6. [Get Post By Id](#get-post-by-id) 
 
+* [Category](#category)
+    1. [Create Category](#create-category)
+    2. [Update Category](#update-category)
+    3. [Delete Category](#delete-category)
+    4. [Get All Category](#get-all-category)
+    5. [Get Category By Id](#get-category-by-id)
   
 ## Authentication
 
@@ -436,6 +442,137 @@
     "published_at": null,
     "created_at": "2023-03-31T00:00:00Z",
     "updated_at": "2023-03-31T00:00:00Z"
+  },
+  "message": "success",
+  "success": true
+}
+```
+
+## Category
+
+### 1. Create Category
+
+- URL: `/api/category/create`
+- Method: `POST`
+- Request Header:
+  - Authorization: `Bearer <token>`
+- Request body:
+  - `title`: string
+  - `content`: string
+
+**Example success response**
+```json
+{
+  "data": {
+    "id_category": "c1b61edc-e281-4fa2-8fc5-bf9f747c7c53",
+    "title": "Bahasa Arab",
+    "meta_title": "Bahasa-Arab",
+    "slug": "bahasa-arab",
+    "content": "Topik yang berkaitan dengan bahasa arab",
+    "created_at": "2023-03-31T18:35:30.4788098+07:00",
+    "updated_at": null
+  },
+  "message": "Category created",
+  "success": true
+}
+```
+**Example error response**
+```json
+{
+  "message": "Failed to create category",
+  "success": false
+}
+```
+
+### 2. Update Category
+
+- URL: `/api/category/update`
+- Method: `POST`
+- Request Header:
+  - Authorization: `Bearer <token>`
+- Request body:
+  - `id_category`: string
+  - `title`: string (optional)
+  - `content`: string (optional)
+
+**Example success response**
+```json
+{
+  "message": "Category updated",
+  "success": true
+}
+```
+**Example error response**
+- ID post not found
+```json
+{
+  "message": "Failed to update category",
+  "success": false
+}
+```
+
+### 3. Delete Category
+- URL: `/api/category/delete/:id`
+- Method: `POST`
+- Request Header:
+  - Authorization: `Bearer <token>`
+
+**Example success response**
+```json
+{
+  "message": "Category deleted",
+  "success": true
+}
+```
+
+### 4. Get All Category
+- URL: `/api/category/get/all`
+- Method: `GET`
+
+**Example success response**
+```json
+{
+  "data": [
+    {
+      "id_category": "a2d0e26b-c0e4-4f21-b72f-6730877e8960",
+      "title": "Bahasa Arab",
+      "meta_title": "Bahasa-Arab",
+      "slug": "bahasa-arab",
+      "content": "Topik yang berkaitan dengan bahasa arab",
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": null
+    },
+    {
+      "id_category": "a22f1530-bf3e-4d68-b6f7-3e60774ee1e6",
+      "title": "Fiqih",
+      "meta_title": "Fiqih",
+      "slug": "fiqih",
+      "content": "Topik yang berkaitan dengan fiqih",
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": null
+    }
+  ],
+  "message": "success",
+  "success": true
+}
+```
+
+### 5. Get Category By Id
+
+- URL: `/api/category/get/:id`
+- Method: `GET`
+
+**Example success response**
+```json
+{
+  "data": {
+    "id_category": "a22f1530-bf3e-4d68-b6f7-3e60774ee1e6",
+    "title": "Fiqih",
+    "meta_title": "Fiqih",
+    "slug": "fiqih",
+    "content": "Topik yang berkaitan dengan fiqih",
+    "created_at": "0001-01-01T00:00:00Z",
+    "updated_at": null
   },
   "message": "success",
   "success": true
