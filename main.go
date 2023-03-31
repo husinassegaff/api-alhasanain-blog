@@ -20,6 +20,7 @@ func main() {
 	api.GET("/user/get/:id", controllers.GetUserById)
 
 	api.POST("/post/create", controllers.CreatePost)
+	api.POST("/post/update", controllers.UpdatePost)
 
 	// Handle 404
 	router.NoRoute(func(c *gin.Context) {

@@ -92,3 +92,90 @@ func CreatePost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "success", "data": post})
 
 }
+
+func UpdatePost(c *gin.Context) {
+
+	var post structs.Post
+
+	err := c.ShouldBindJSON(&post)
+
+	if err != nil {
+
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+
+		return
+
+	}
+
+	// Mengambil header Authorization dari permintaan
+	authHeader := c.GetHeader("Authorization")
+
+	// Memeriksa apakah header Authorization ada atau tidak
+	if authHeader == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"success": false,
+			"message": "Authorization header required",
+		})
+		return
+	}
+
+	// Memisahkan token dari header dengan split
+	splitToken := strings.Split(authHeader, "Bearer ")
+	if len(splitToken) != 2 {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"success": false,
+			"message": "Invalid token format",
+		})
+		return
+	}
+
+	// Mengambil token dari hasil split
+	token := splitToken[1]
+
+	// Memverifikasi token
+	err, role := repository.GetRoleWithToken(token)
+
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"success": false,
+			"message": "Invalid token",
+		})
+		return
+	}
+
+	if role != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"success": false,
+			"message": "You are not admin",
+		})
+		return
+	}
+
+	// check post exist or not
+	isExist := repository.CheckPostById(post.ID)
+
+	if isExist == false {
+		c.JSON(http.StatusNotFound, gin.H{
+			"success": false,
+			"message": "Post not found",
+		})
+		return
+	}
+
+	err = repository.UpdatePost(post)
+
+	if err != nil {
+
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": err.Error()})
+
+		return
+
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "success"})
+
+}
