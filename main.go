@@ -38,6 +38,10 @@ func main() {
 	api.GET("/meta/get/all", controllers.GetAllMeta)
 	api.GET("/meta/get/:id", controllers.GetMetaById)
 
+	api.POST("/comment/create", controllers.CreateComment)
+	api.POST("/comment/delete/:id", controllers.DeleteComment)
+	api.GET("/comment/get/all", controllers.GetAllComment)
+
 	// Handle 404
 	router.NoRoute(func(c *gin.Context) {
 		c.JSON(404, gin.H{"message": "Not found"})

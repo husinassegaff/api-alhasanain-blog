@@ -89,3 +89,26 @@ func GetEmailWithToken(token string) (err error, email string) {
 
 	return nil, email
 }
+
+func GetIdWithToken(token string) (err error, id string) {
+
+	s := "SELECT id FROM public.user WHERE token = $1"
+
+	database.Init()
+
+	row := database.DB.QueryRow(s, token)
+
+	err = row.Scan(&id)
+	if err != nil {
+		return err, ""
+	}
+
+	defer func(DB *sql.DB) {
+		err := DB.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(database.DB)
+
+	return nil, id
+}
