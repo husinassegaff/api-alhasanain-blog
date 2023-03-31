@@ -4,7 +4,8 @@
 * [Authentication](#authentication)
     1. [Register](#register)
     2. [Login](#login)
-    3. [Get All User](#get-all-user) 
+    3. [Get All User](#get-all-user)
+    4. [Get User By Id](#get-user-by-id)
 
   
 ## Authentication
@@ -159,5 +160,34 @@
 {
     "message": "You are not authorized to access this resource",
     "success": false
+}
+```
+
+### 4. Get User By Id
+
+- URL: `/api/user/get/:id`
+- Method: `GET`
+
+**Example success response**
+```json
+{
+  "data": {
+    "id_user": "5a3257c7-7c94-4ada-aa2f-639f89372571",
+    "name": "husinassegaff",
+    "email": "husin@gmail.com",
+    "role": "user",
+    "token": "AnPLBiUwjxXKSoCOmVS5uzvIbCU5fZj5oYunXwRzja4="
+  },
+  "message": "success",
+  "success": true
+}
+```
+**Example error response**
+- ID not found
+```json
+{
+  "error": "user not found",
+  "message": "failed",
+  "success": false
 }
 ```
