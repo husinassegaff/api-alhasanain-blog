@@ -51,7 +51,7 @@ func RegisterUser(c *gin.Context) {
 		return
 	}
 
-	response.CreateUserResponse(user)
+	userResponse = response.CreateUserResponse(user)
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
